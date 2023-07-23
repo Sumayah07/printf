@@ -99,4 +99,3 @@ int power(int base, int exponent)
         }
         return result();
 }
-
