@@ -1,30 +1,35 @@
 #include <stdio.h>
-#include <stdlib.h>
-/*
- *convertToBinary: the unsigned int argument is converted to binary
- * @ b: the unsigned int argument is converted to binary
+/**
  * main - unsigned int num
+ * convertToBinary: convert numbers to integer
+ * @ b: the unsigned int argument is converted to binary
+ * Return: 0 always
  */
 void convertToBinary(unsigned int num)
 {
-	int binary[32]; /*assuming max number size is 32 bits*/
-	int i = 0;
+	unsigned int mask = 1 << ((sizeof(unsigned int) * 8) - 1);
+	/*create a mask to extract each bit*/
+	int leadingZeros = 1;
+	/*flag to ignore leading zeros*/
+	for (int i = 0; i < sizeof(unsigned int) * 8; i++)
+	{
+		int bit = (num & mask) ? 1 : 0;
 
-	while (num > 0)
-	{
-		binary[i] = num % 2;
-		num = num / 2;
-		i++;
-	}
-	for (int j = i - 1; j >= 0; j--)
-	{
-		printf("%d", binary[j]);
+		/*check if the current bit is set*/
+		if (leadingZeros  bit)
+		{
+			printf("%d", bit);
+			leadingZeros = 0;
+			/*set flag to false after first bit is encountered*/
+		}
+		mask >>= 1;
+		/*shift the mask for the next bit*/
 	}
 }
 
 int main(void)
 {
-	unsigned int num = 123;
+	unsigned int num = 23;
 
 	printf("%b\n", num);
 	return (0);
