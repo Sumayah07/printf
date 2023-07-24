@@ -1,36 +1,37 @@
-#include <stdio.h>
+#include "main.h"
+
 /**
- * main - unsigned int num
- * convertToBinary: convert numbers to integer
- * @ b: the unsigned int argument is converted to binary
- * Return: 0 always
+ * fill_binary_array - prints decimal in binary
+ * @binary: pointer to binary
+ * @int_in: input number
+ * @isneg: if input number is negative
+ * @limit: size of the binary
+ * Return: number of chars printed.
  */
-void convertToBinary(unsigned int num)
+char *fill_binary_array(char *binary, long int int_in, int isneg, int limit)
 {
-	unsigned int mask = 1 << ((sizeof(unsigned int) * 8) - 1);
-	/*create a mask to extract each bit*/
-	int leadingZeros = 1;
-	/*flag to ignore leading zeros*/
-	for (int i = 0; i < sizeof(unsigned int) * 8; i++)
+	int i;
+
+	for (i = 0; i < limit; i++)
+		binary[i] = '0';
+	binary[limit] = '\0';
+	for (i = limit - 1; int_in > 1; i--)
 	{
-		int bit = (num & mask) ? 1 : 0;
-
-		/*check if the current bit is set*/
-		if (leadingZeros  bit)
-		{
-			printf("%d", bit);
-			leadingZeros = 0;
-			/*set flag to false after first bit is encountered*/
-		}
-		mask >>= 1;
-		/*shift the mask for the next bit*/
+		if (int_in == 2)
+			binary[i] = '0';
+		else
+			binary[i] = (int_in % 2) + '0';
+		int_in /= 2;
 	}
-}
-
-int main(void)
-{
-	unsigned int num = 23;
-
-	printf("%b\n", num);
-	return (0);
+	if (int_in != 0)
+		binary[i] = '1';
+	if (isneg)
+	{
+		for (i = 0; binary[i]; i++)
+			if (binary[i] == '0')
+				binary[i] = '1';
+			else
+				binary[i] = '0';
+	}
+	return (binary);
 }
