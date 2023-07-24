@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <unistd.h>
+/*
+ * _printf - write output to stdout, the standard output stream
+ * Returns: the number of characters printed (excluding the null byte used to end output to strings)
+ */
 int _printf(const char *format, ...)
 {
 	va_list args;
@@ -13,6 +17,7 @@ int _printf(const char *format, ...)
 		if (*format == '%')
 		{
 			format++;
+
 			/*Move past the '%'
 			 * Handle the conversion specifier
 			 */
@@ -21,7 +26,8 @@ int _printf(const char *format, ...)
 				case 'c':
 					{
 						char c = va_arg(args, int);
-						write(1, &c, 1);/*Write the character to stdout*/
+						write(1, &c, 1);
+						/*Write the character to stdout*/
 						count++;
 						break;
 					}
@@ -57,5 +63,5 @@ int _printf(const char *format, ...)
 		format++;
 	}
 	va_end(args);
-	return count;
+	return count(0);
 }
