@@ -1,44 +1,28 @@
-#include <stdio.h>
-#include <string.h>
+#include "main.h"
 
-#define MAX_BUFFER_SIZE 1024
-
-char buffer[MAX_BUFFER_SIZE];
-int bufferIndex = 0;
-
-void write_data(const char* data)
+/**
+ * fill_long_oct_array - calculates a long octal number
+ *
+ * @bnr: array where is stored the binary.
+ * @oct: array where is stored the octal.
+ *
+ * Return: binary array.
+ */
+char *fill_long_oct_array(char *bnr, char *oct)
 {
-	int dataLen = strlen(data);
+	int op, i, j, ioct, limit;
 
-	/*Check if the current buffer combined with new data exceeds the maximum buffer size*/
-	if ((bufferIndex + dataLen) >= MAX_BUFFER_SIZE)
+	oct[22] = '\0';
+	for (i = 63, ioct = 21; i >= 0; i--, ioct--)
 	{
-		write_buffer();
+		if (i > 0)
+			limit = 4;
+		else
+			limit = 1;
+		for (op = 0, j = 1; j <= limit; j *= 2, i--)
+			op = ((bnr[i] - '0') * j) + op;
+		i++;
+		oct[ioct] = op + '0';
 	}
-
-	/*Copy new data to the buffer*/
-	strcpy(buffer + bufferIndex, data);
-
-	/*Update the buffer index*/
-	bufferIndex += dataLen;
-}
-
-void write_buffer()
-{
-	/*Write the buffer contents to a file or stream using the "write" function
-	 * Example: write(fd, buffer, bufferIndex);*/
-	printf("Writing: %s\n", buffer);
-
-	/*Reset the buffer index*/
-	bufferIndex = 0;
-}
-
-int main(void)
-{
-	write_data("This is some data");
-	write_data(" that needs to be written");
-	write_data(" in chunks to optimize performance");
-	/*After the last call to write_data, make sure to write any remaining data in the buffer*/
-	write_buffer();
-	return (0);
+	return (oct);
 }
