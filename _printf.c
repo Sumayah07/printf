@@ -1,51 +1,75 @@
-#include "main.h"
+#include <stdio.h>
+#include <stdarg.h>
 
-/**
- * _printf - formatted output conversion and print data.
- * @format: input string.
- *
- * Return: number of chars printed.
- */
 int _printf(const char *format, ...)
 {
-	unsigned int i = 0, len = 0, ibuf = 0;
-	va_list arguments;
-	int (*function)(va_list, char *, unsigned int);
-	char *buffer;
+	va_list args;
+	va_start(args, format);
 
-	va_start(arguments, format), buffer = malloc(sizeof(char) * 1024);
-	if (!format || !buffer || (format[i] == '%' && !format[i + 1]))
-		return (-1);
-	if (!format[i])
-		return (0);
-	for (i = 0; format && format[i]; i++)
+	int count = 0;
+	/*Counter to keep track of the number of characters printed*/
+
+	while (*format != '\0')
 	{
-		if (format[i] == '%')
-		{
-			if (format[i + 1] == '\0')
-			{	print_buf(buffer, ibuf), free(buffer), va_end(arguments);
-				return (-1);
+		if (*format == '%') {
+			format++;
+			/*Move past the '%'
+			 * Handle the conversion specifier*/
+			switch (*format)
+			{
+				case 'c':
+					/*Print a single character*/
+					putchar(va_arg(args, int));
+					count++;
+					break;
+				case 's':
+					{
+						/*Print a string*/
+						const char *str = va_arg(args, const char *);
+						while (*str != '\0')
+						{
+							putchar(*str);
+							str++;
+							count++;
+						}
+						break;
+					}
+				case '%':
+					/*Print a literal '%'*/
+					putchar('%');
+					count++;
+					break;
+				default:
+					/*If an unsupported specifier is encountered, just print it as it is*/
+					putchar('%');
+					putchar(*format);
+					count += 2;
+					break;
 			}
-			else
-			{	function = get_print_func(format, i + 1);
-				if (function == NULL)
-				{
-					if (format[i + 1] == ' ' && !format[i + 2])
-						return (-1);
-					handl_buf(buffer, format[i], ibuf), len++, i--;
-				}
-				else
-				{
-					len += function(arguments, buffer, ibuf);
-					i += ev_print_func(format, i + 1);
-				}
-			} i++;
 		}
 		else
-			handl_buf(buffer, format[i], ibuf), len++;
-		for (ibuf = len; ibuf > 1024; ibuf -= 1024)
-			;
+		{
+			/*Print any other characters in the format string as they are*/
+			putchar(*format);
+			count++;
+		}
+		
+		format++;
 	}
-	print_buf(buffer, ibuf), free(buffer), va_end(arguments);
-	return (len);
+	
+	va_end(args);
+	tyreturn count;
+}
+int main(void)
+{
+	int num = 42;
+	char ch = 'A';
+	char str[] = "Hello, World!";
+
+	_printf("Integer: %d\n", num);
+	_printf("Character: %c\n", ch);
+	_printf("String: %s\n", str);
+	_printf("%% - This is a percent sign.\n");
+
+	return 0;
 }
