@@ -1,6 +1,11 @@
+#include "main.h"
 #include <stdio.h>
 #include <stdarg.h>
-
+/**
+ * main - create _printf
+ * function - const char *format
+ * return: always 0
+ */
 int _printf(const char *format, ...)
 {
 	va_list args;
@@ -11,7 +16,8 @@ int _printf(const char *format, ...)
 
 	while (*format != '\0')
 	{
-		if (*format == '%') {
+		if (*format == '%')
+		{
 			format++;
 			/*Move past the '%'
 			 * Handle the conversion specifier*/
@@ -53,10 +59,8 @@ int _printf(const char *format, ...)
 			putchar(*format);
 			count++;
 		}
-		
 		format++;
 	}
-	
 	va_end(args);
 	tyreturn count;
 }
@@ -71,5 +75,5 @@ int main(void)
 	_printf("String: %s\n", str);
 	_printf("%% - This is a percent sign.\n");
 
-	return 0;
+	return (0);
 }
